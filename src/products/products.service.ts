@@ -69,23 +69,20 @@ export class ProductsService {
 	}
 
 	async update(id: string, updateProductDto: UpdateProductDto) {
-		const productValidation = await this.findOne(updateProductDto.slug);
-
-		if (updateProductDto.slug === productValidation.slug)
-			throw new BadRequestException(
-				`Value of ${updateProductDto.slug} is duplicated`,
-			);
-
 		const product = await this.productRepository.preload({
 			id: id,
 			...updateProductDto,
 		});
+
+		console.log(product);
 
 		if (!product)
 			throw new NotFoundException(`Product with id: ${id} not found`);
 
 		try {
 			await this.productRepository.save(product);
+			console.log(product);
+
 			return product;
 		} catch (error) {
 			this.handleDBExceptions(error);

@@ -48,7 +48,7 @@ export class Product {
 	//images
 
 	@BeforeInsert()
-	checkSlug() {
+	checkSlugInsert() {
 		if (!this.slug) {
 			this.slug = this.title;
 		}
@@ -59,5 +59,11 @@ export class Product {
 			.replaceAll("'", '');
 	}
 
-	//@BeforeUpdate()
+	@BeforeUpdate()
+	checkSlugUpdate() {
+		this.slug = this.slug
+			.toLocaleLowerCase()
+			.replaceAll(' ', '_')
+			.replaceAll("'", '');
+	}
 }
